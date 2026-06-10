@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   const [userId, setUserId] = useState("");
   const [type, setType] = useState("login");
   const [payload, setPayload] = useState("");
+
+  const [events, setEvents] = useState([]);
+
+  const loadEvents = async () => {
+    const response = await fetch("http://localhost:8000/events");
+
+    const data = await response.json();
+
+    setEvents(data);
+  };
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
 
   const createEvent = async () => {
     const response = await fetch("http://localhost:8000/events", {
@@ -23,6 +37,8 @@ function App() {
     console.log(data);
 
     alert("Événement créé !");
+
+    loadEvents();
   };
 
   return (
@@ -44,7 +60,10 @@ function App() {
       <div>
         <label>Type</label>
         <br />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
           <option value="login">login</option>
           <option value="transaction">transaction</option>
           <option value="report">report</option>
@@ -68,6 +87,18 @@ function App() {
       <button onClick={createEvent}>
         Créer un événement
       </button>
+
+      <hr />
+
+      <h2>Liste des événements</h2>
+
+      <ul>
+        {events.map((event) => (
+          <li key={event.id}>
+            {event.user_id} - {event.type}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
