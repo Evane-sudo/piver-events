@@ -9,7 +9,8 @@ from app.models import Event
 import app.models
 
 from app.schemas import EventCreate
-
+from typing import Optional
+from app.models import EventType
 
 Base.metadata.create_all(bind=engine)
 
@@ -51,3 +52,20 @@ def create_event(
     db.refresh(new_event)
 
     return new_event
+
+
+@app.get("/events")
+def list_events(
+    user_id: Optional[str] = None,
+    type: Optional[EventType] = None,
+    db: Session = Depends(get_db)
+):
+    query = db.query(Event)
+
+    if user_id:
+        query = query.filter(Event.user_id == user_id)
+
+    if type:
+        query = query.filter(Event.type == type)
+
+    return query.all()
