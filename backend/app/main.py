@@ -1,3 +1,5 @@
+from fastapi.middleware.cors import CORSMiddleware
+
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
@@ -15,6 +17,14 @@ from app.models import EventType
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_db():
