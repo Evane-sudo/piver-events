@@ -2,118 +2,113 @@
 
 ## Présentation
 
-Mini API de suivi d'événements développée avec :
+PIVER Events est une application permettant de stocker et consulter des événements utilisateurs.
 
-- FastAPI
-- PostgreSQL
-- React
-- Docker Compose
+Le projet a été réalisé avec :
 
-L'application permet :
+* FastAPI
+* PostgreSQL
+* React
+* Docker Compose
 
-- la création d'événements
-- la consultation des événements
-- le filtrage par utilisateur ou type
-- l'affichage d'un résumé utilisateur
+## Fonctionnalités
 
----
+### Backend
 
-## Lancement du projet
+* Création d'un événement via `POST /events`
+* Liste des événements via `GET /events`
+* Filtrage des événements par `user_id` et `type`
+* Résumé d'activité d'un utilisateur via `GET /users/{user_id}/summary`
 
-**Prérequis :**
+### Frontend
 
-- Docker
-- Docker Compose
-
-**Lancer le projet :**
-
-```bash
-docker compose up --build
-```
-
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:5173 |
-| Backend | http://localhost:8000 |
-| Swagger | http://localhost:8000/docs |
-
----
+* Formulaire de création d'événements
+* Affichage de la liste des événements
+* Affichage du résumé d'un utilisateur
 
 ## Structure du projet
 
-```
+```text
 piver-events/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py
 │   │   ├── models.py
 │   │   ├── schemas.py
-│   │   ├── crud.py
 │   │   └── database.py
 │   ├── requirements.txt
 │   └── Dockerfile
+│
 ├── frontend/
 │   ├── src/
 │   │   └── App.jsx
 │   ├── Dockerfile
 │   └── package.json
+│
 ├── docker-compose.yml
 ├── .env.example
 └── README.md
 ```
 
----
+## Lancement du projet
+
+### Prérequis
+
+* Docker
+* Docker Compose
+
+### Démarrage
+
+```bash
+docker compose up --build
+```
+
+### Accès aux services
+
+| Service  | URL                        |
+| -------- | -------------------------- |
+| Frontend | http://localhost:5173      |
+| Backend  | http://localhost:8000      |
+| Swagger  | http://localhost:8000/docs |
 
 ## Choix techniques
 
-### Backend
+### FastAPI
 
-- **FastAPI** — simplicité, performance et génération automatique de la documentation Swagger
-- **SQLAlchemy** — ORM Python mature, évite le SQL brut et facilite les migrations
-- **PostgreSQL** — base relationnelle robuste, bien adaptée à un modèle d'événements typés
+Utilisé pour développer rapidement une API REST et bénéficier d'une documentation Swagger automatique.
 
-### Frontend
+### PostgreSQL
 
-- **React + Vite** — démarrage rapide, adapté à une interface sur une seule page comme demandé dans l'énoncé
+Utilisé pour stocker les événements de manière persistante.
 
-### Conteneurisation
+### SQLAlchemy
 
-- **Docker** pour chaque service (backend, frontend, base de données)
-- **Docker Compose** pour orchestrer l'ensemble — un seul `docker compose up --build` suffit
-- **Healthcheck** sur PostgreSQL avec `depends_on: condition: service_healthy` pour éviter que le backend démarre avant que la base soit prête
+Utilisé comme ORM pour interagir avec PostgreSQL.
 
----
+### React
 
-## Fonctionnalités implémentées
+Utilisé pour fournir une interface simple permettant d'utiliser l'API.
 
-- `POST /events` — création d'un événement
-- `GET /events` — liste des événements avec filtres optionnels (`user_id`, `type`)
-- `GET /users/{user_id}/summary` — résumé d'activité d'un utilisateur (total, répartition par type, premier et dernier événement)
-- Formulaire de création d'événement depuis le frontend
-- Liste des événements avec filtrage
-- Affichage du résumé utilisateur
+### Docker Compose
 
----
+Permet de lancer l'ensemble des services avec une seule commande.
 
-## Améliorations possibles
+## Limites et pistes d'amélioration
 
-Avec plus de temps, j'aurais ajouté :
+Avec plus de temps, plusieurs améliorations pourraient être ajoutées :
 
-- Pagination sur la liste des événements
-- Tests automatisés sur l'API (pytest)
-- Gestion avancée des erreurs et validation d'entrée plus stricte
-- Authentification
-- Interface utilisateur plus élaborée
-
----
+* tests automatisés (pytest)
+* pagination des résultats
+* amélioration de l'interface utilisateur
+* gestion plus avancée des erreurs
+* authentification
 
 ## Utilisation de l'IA
 
 ChatGPT a été utilisé pour :
 
-- structurer l'approche et l'ordre des étapes
-- aide au débogage Docker (healthcheck, réseau entre conteneurs)
-- revue de cohérence entre le backend et le frontend
-- assistance sur certaines implémentations React et FastAPI
+* aide à la résolution de problèmes techniques
+* revue de cohérence du projet
+* assistance ponctuelle sur React, FastAPI et Docker
 
-L'intégration, les tests et les validations ont été réalisés manuellement.
+Les choix d'implémentation, l'intégration et les validations ont été réalisés manuellement.
